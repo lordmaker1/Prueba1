@@ -1,8 +1,8 @@
 <template>
   <div class="py-12 px-20 md:px-20 lg:px-56 space-y-10">
     <div class="flex flex-col text-4xl font-bold space-y-2 text-white items-center justify-center">
-      <h1>Visualizador de Datos de Sensor</h1>
-      <h2 class="text-lg">Usted está viendo los datos del contenedor 1</h2>
+      <h1>Visualizador de Datos</h1>
+      <h2 class="text-lg">Usted está viendo los datos del sensor</h2>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 justify-center gap-4">
       <div v-for="sensor in sensores" class="flex items-center justify-center">
@@ -50,41 +50,53 @@ mqttClient.on("message", async function (topic, message) {
   
   // Verifica si el tópico corresponde al sensor esperado
   if (topic === "contenedor1") {
-    temp.value = parseFloat(value); // Convierte el valor a número si es posible
-    console.log(`Temperatura actualizada: ${temp.value}°C`);
+    pulsos.value = parseFloat(value); // Convierte el valor a número si es posible
+    console.log(`pulsos actualizada: ${pulsos.value}°C`);
   } 
   if (topic === "contenedor2") {
-    hum.value = parseFloat(value); // Convierte el valor a número si es posible
-    console.log(`Humedad actualizada: ${hum.value}%`);
-  } else {
-    console.warn(`Tópico no reconocido: ${topic}`);
-  }
+    spo2.value = parseFloat(value); // Convierte el valor a número si es posible
+    console.log(`spo2 actualizada: ${spo2.value}%`);
+  } 
+  if (topic === "contenedor3") {
+    temp.value = parseFloat(value); // Convierte el valor a número si es posible
+    console.log(`Humedad actualizada: ${temp.value}%`);
+  } 
 
 });
-
+let pulsos = ref(0)
+let spo2 = ref(0)
 let temp = ref(0)
-let hum = ref(0)
+
 
 const sensores = [
   {
     id:1,
+    nameSensor:'Frecuencia Cardiaca',
+    dataSensor:pulsos,
+    nameIcon:"fa-heartbeat",
+    info: 'Frecuencia Cardiaca'
+  },
+  {
+    id:2,
+    nameSensor:'Nivel de Oxigeno(%)',
+    dataSensor:spo2,
+    nameIcon:"fa-tint",
+    info: 'Nivel de oxigeno en la sangre'
+  },
+  {
+    id:3,
     nameSensor:'Temperatura(C°)',
     dataSensor:temp,
     nameIcon:"fa-temperature-low",
     info: 'Sensor de temperatura'
-  },
-  {
-    id:2,
-    nameSensor:'Humedad(%)',
-    dataSensor:hum,
-    nameIcon:"wi-humidity",
-    info: 'Sensor de humedad'
   }
+
 ];
 mqttClient.on("connect", () => {
   console.log("MQTT client connected");
   mqttClient.subscribe("contenedor1"); // Suscripción para temperatura
-  mqttClient.subscribe("contenedor2"); // Suscripción para humedad
+  mqttClient.subscribe("contenedor2");
+  mqttClient.subscribe("contenedor3"); // Suscripción para humedad
 });
 
 </script>
