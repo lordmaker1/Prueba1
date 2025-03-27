@@ -1,5 +1,5 @@
 <template>
-  <section class="w-80 h-72 flex flex-col bg-gray-600 rounded-3xl bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 shadow-[0_0px_10px_rgba(255,255,255,_0.7)]">
+  <section class="w-[400px] h-[300px] flex flex-col bg-gray-600 rounded-3xl bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 shadow-[0_0px_10px_rgba(255,255,255,_0.7)]">
     <div class="flex justify-between px-1 pt-1">
       <div class="w-16 h-16 flex text-white items-center justify-center bg-gray-600 rounded-full bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-15">
         <v-icon :name= iconName scale="1.5"></v-icon>
@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="flex text-center justify-center items-center text-white p-4">
-      <h2 class="overflow-hidden whitespace-normal w-36 h-28 text-7xl">
+      <h2 class="overflow-auto whitespace-normal w-94 h-28 text-5xl">
         {{dataSection}}
       </h2>
     </div>
