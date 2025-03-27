@@ -2,9 +2,9 @@
   <div class="py-12 px-20 md:px-20 lg:px-56 space-y-10">
     <div class="flex flex-col text-4xl font-bold space-y-2 text-white items-center justify-center">
       <h1>Visualizador de Datos</h1>
-      <h2 class="text-lg">Usted está viendo los datos del sensor</h2>
+      <h2 class="text-lg">Usted está viendo los datos de...</h2>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 justify-center gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 justify-center gap-4">
       <div v-for="sensor in sensores" class="flex items-center justify-center">
         <CardContainer  :name-section="sensor.nameSensor"
                         :data-section="sensor.dataSensor"
@@ -48,40 +48,51 @@ mqttClient.on("message", async function (topic, message) {
 
  
   
+ 
   // Verifica si el tópico corresponde al sensor esperado
   if (topic === "contenedor1") {
-    pulsos.value = parseFloat(value); // Convierte el valor a número si es posible
-    console.log(`pulsos actualizada: ${pulsos.value}°C`);
+    ubi.value = String(value); // Convierte el valor a número si es posible
+    console.log(`ubicacion actualizada: ${typeof ubi.value}`);
   } 
   if (topic === "contenedor2") {
-    spo2.value = parseFloat(value); // Convierte el valor a número si es posible
-    console.log(`spo2 actualizada: ${spo2.value}%`);
+    fire.value = String(value); // Convierte el valor a número si es posible
+    console.log(`fuego actualizada: ${typeof fire.value}`);
   } 
   if (topic === "contenedor3") {
-    temp.value = parseFloat(value); // Convierte el valor a número si es posible
-    console.log(`Humedad actualizada: ${temp.value}%`);
+    temp.value = parseInt(value); // Convierte el valor a número si es posible
+    console.log(`temperatura actualizada: ${typeof temp.value}C°`);
+  }
+  if (topic === "contenedor4") {
+    hum.value = parseInt(value); // Convierte el valor a número si es posible
+    console.log(`Humedad actualizada: ${typeof hum.value}%`);
+  } 
+  if (topic === "contenedor5") {
+    cap.value = parseInt(value); // Convierte el valor a número si es posible
+    console.log(`capcacidad actualizada: ${typeof temp.value}%`);
   } 
 
 });
-let pulsos = ref(0)
-let spo2 = ref(0)
+let ubi = ref(0)
+let fire = ref(0)
 let temp = ref(0)
+let hum = ref(0)
+let cap = ref(0)
 
 
 const sensores = [
   {
     id:1,
-    nameSensor:'Frecuencia Cardiaca',
-    dataSensor:pulsos,
-    nameIcon:"fa-heartbeat",
-    info: 'Frecuencia Cardiaca'
+    nameSensor:'Ubicacion',
+    dataSensor:ubi,
+    nameIcon:"fa-map",
+    info: 'latitud y longitud'
   },
   {
     id:2,
-    nameSensor:'Nivel de Oxigeno(%)',
-    dataSensor:spo2,
-    nameIcon:"fa-tint",
-    info: 'Nivel de oxigeno en la sangre'
+    nameSensor:'Señales de Fuego',
+    dataSensor:fire,
+    nameIcon:"fa-fire",
+    info: 'sensor de fuego'
   },
   {
     id:3,
@@ -89,6 +100,20 @@ const sensores = [
     dataSensor:temp,
     nameIcon:"fa-temperature-low",
     info: 'Sensor de temperatura'
+  },
+  {
+    id:4,
+    nameSensor:'Humedad %',
+    dataSensor:hum,
+    nameIcon:"fa-tint",
+    info: 'Sensor de humedad'
+  },
+  {
+    id:5,
+    nameSensor:'Capacidad %',
+    dataSensor:cap,
+    nameIcon:"fa-layer-group",
+    info: 'sensor ultrasonico'
   }
 
 ];
@@ -97,6 +122,8 @@ mqttClient.on("connect", () => {
   mqttClient.subscribe("contenedor1"); // Suscripción para temperatura
   mqttClient.subscribe("contenedor2");
   mqttClient.subscribe("contenedor3"); // Suscripción para humedad
+  mqttClient.subscribe("contenedor4");
+  mqttClient.subscribe("contenedor5");
 });
 
 </script>
